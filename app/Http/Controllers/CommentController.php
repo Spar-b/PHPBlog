@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Comment;
 
 class CommentController extends Controller
 {
@@ -15,11 +16,11 @@ class CommentController extends Controller
 
         Comment::create([
             'body' => $request->body,
-            'post_id' => $post->id,
-            'user_id' => auth()->id(),
+            'post_id' => $request->post_id,
+            'user_id' => 1,
         ]);
 
-        return back();
+        return redirect()->route('posts.show', $request->post_id);
     }
 
 
