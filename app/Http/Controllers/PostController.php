@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Model\Post;
+use App\Models\Post;
 
 class PostController extends Controller
 {
@@ -17,20 +17,34 @@ class PostController extends Controller
         Post::create([
             'title' => $request->title,
             'content' => $request->content,
-            'user_id' => auth()->id(),
+            'user_id' => 1,#auth()->id(),
         ]);
 
         return redirect()->route('posts.index');
     }
 
+    public function create()
+    {
+        return view('create');
+    }
+
+    public function edit($id)
+    {
+        $post = Post::find($id);
+        $send = [$id, $post];
+        return view('edit', compact('send'));
+    }
+
     public function index()
     {
         $posts = Post::all();
-        return view('posts.index', compact('posts'));
+        return view('index', compact('posts'));
     }
 
-    public function update(Request $request, Post $post)
+    public function update(Request $request, int $id)
     {
+        $post = Post::find($id);
+
         $request->validate([
             'title' => 'required',
             'content' => 'required',
